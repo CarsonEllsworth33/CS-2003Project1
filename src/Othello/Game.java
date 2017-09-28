@@ -11,23 +11,25 @@ import java.util.Scanner;
 public class Game {
 	
 	private String input;
+	private Board board = new Board();
+	private Player player1 = new Player(1);
+	private Player player2 = new Player(2);
 	/**
 	 * creates an instance of Board to play the game
 	 */
 	public Game() {
-		
-		Board board = new Board();
 		board.startState();
-		board.toString();
-		System.out.println("Welcome players to the game of Othello\nPlease enter a name for player 1: ");
-		this.getInput(System.in);
-		Player player1 = new Player(input, 1);
-		System.out.println("Please enter a name for player 2: ");
-		this.getInput(System.in);
-		Player player2 = new Player(input, 2);
-		System.out.println("Let's play Othello!");
-		//need win con to move forward
-		
+		System.out.println("Welcome players to the game of Othello");
+		System.out.println("Let's play!");
+		while(board.getGameOver() == false){
+			board.takeTurn(player1);
+			board.winCondition();
+			if(board.getGameOver() == true) continue;//if player 1 quits this will make it so that player 2 doesn't have to go through an entire move to end the game
+			board.takeTurn(player2);
+			board.winCondition();
+			//break;//test win condition
+		}
+		this.endGame();
 		
 	}
 	/**
@@ -40,14 +42,33 @@ public class Game {
 		input = scanner.nextLine();
 		return input;
 	}
-
+	public void endGame() {
+		if(board.Score(player1)>board.Score(player2))
+		{
+			System.out.println("Congragulations Player 1 you win!!!");
+			System.out.println("You beat Player 2 by " + (board.Score(player1) - board.Score(player2) + " points"));
+			System.out.println("you are definitly a much better player");
+		}
+		else if(board.Score(player2)>board.Score(player1))
+		{
+			System.out.println("Congragulations Player 2 you win!!!");
+			System.out.println("You beat Player 1 by " + (board.Score(player2) - board.Score(player1) + " points"));
+			System.out.println("you are definitly a much better player");
+		}
+		else {
+			System.out.println("You two tied!!! no thats not acceptable PLAY AGAIN");
+			Game Hellthello = new Game();
+		}
+	
+	}
+	
 	/**
 	 * main function to run othello
 	 * @param args
 	 */
 	public static void main(String args[])
 	{//start main
-		Game test = new Game();
+		Game othello = new Game();
 		
 	}//end main
 	

@@ -27,7 +27,7 @@ public class Disc {
 	}//end of flip
 	
 	/**
-	 * 
+	 * Returns the value of the disc based on id of player
 	 * @return State of the selected disc
 	 */
 	public int getState()
@@ -39,7 +39,7 @@ public class Disc {
 	}
 	
 	/**
-	 * Must put in a 1 or 0 for white or black respectively
+	 * Must put in a 1 or 0 for white or black respectively to set the state of a game disc
 	 * @param State
 	 * @return
 	 */
