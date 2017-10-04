@@ -12,8 +12,8 @@ public class Game {
 	
 	private String input;
 	private Board board = new Board();
-	private Player player1 = new Player(1);
-	private Player player2 = new Player(2);
+	private Player player1 = new Player(2);
+	private Player player2 = new Player(1);
 	/**
 	 * creates an instance of Board to play the game
 	 */

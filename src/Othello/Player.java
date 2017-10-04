@@ -12,18 +12,22 @@ public class Player {
 	public Player(int id) {
 		this.setId(id);
 	}
+	
+	
+	public String getPlayerColor() {
+		if(this.id == 1) {
+			return "white";
+		}
+		else {return "black";}
+	}
+	
+	
 	/**
 	 * returns player input -1 to make sure index is in range
 	 * @return
 	 */
 	public int getRowMove() {
 		return Arow - 1;
-	}
-	public boolean getQuitCon() {
-		return quitCon;
-	}
-	public boolean getPassCon() {
-		return passCon;
 	}
 	/**
 	 * returns player input -1 to make sure index is in range
@@ -32,6 +36,13 @@ public class Player {
 	public int getColumnMove() {
 		return Acolumn -1;
 	}
+	public boolean getQuitCon() {
+		return quitCon;
+	}
+	public boolean getPassCon() {
+		return passCon;
+	}
+	
 	
 	public int getId() {
 		return id;
@@ -56,7 +67,7 @@ public class Player {
 	public void turn(InputStream in){
 		quitCon = false;//resets for every turn so to not continuously quit
 		passCon = false;//resets for every turn so to not continuously pass
-		System.out.println("Player " + id + " it is your turn, please put in two whole numbers seperated by a space(do not include \"\" in your answer)\nas your move... for example \"8 5\" would place your piece "
+		System.out.println(this.getPlayerColor() + " player it is your turn, please put in two whole numbers seperated by a space(do not include \"\" in your answer)\nas your move... for example \"8 5\" would place your piece "
 				+ "on the 8th row 5th column\nif you would like to forfiet the match then type in \"quit\"(without quotations)"
 				+ " or type in \"pass\" to pass your turn");
 		Scanner scanner = new Scanner(in);
