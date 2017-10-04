@@ -18,6 +18,20 @@ public class Game {
 	 * creates an instance of Board to play the game
 	 */
 	public Game() {
+		
+		
+	}
+	/**
+	 * this method allows the user take a string out of stream
+	 * @param in
+	 * @return a string of what ever is put into the stream
+	 */
+	public String getInput(InputStream in) {
+		Scanner scanner = new Scanner(in);
+		input = scanner.nextLine();
+		return input;
+	}
+	public void StartGame() {
 		board.startState();
 		System.out.println("Welcome players to the game of Othello");
 		System.out.println("Let's play!");
@@ -31,16 +45,6 @@ public class Game {
 		}
 		this.endGame();
 		
-	}
-	/**
-	 * this method allows the user take a string out of stream
-	 * @param in
-	 * @return a string of what ever is put into the stream
-	 */
-	public String getInput(InputStream in) {
-		Scanner scanner = new Scanner(in);
-		input = scanner.nextLine();
-		return input;
 	}
 	public void endGame() {
 		if(board.Score(player1)>board.Score(player2))
@@ -69,7 +73,7 @@ public class Game {
 	public static void main(String args[])
 	{//start main
 		Game othello = new Game();
-		
+		othello.StartGame();
 	}//end main
 	
 	

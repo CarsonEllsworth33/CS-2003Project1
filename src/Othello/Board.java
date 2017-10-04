@@ -191,7 +191,7 @@ public class Board {
 		}
 	}
 	
-	public boolean flipRowRight(Player p , int row, int column) {//start Row
+	private boolean flipRowRight(Player p , int row, int column) {//start Row
 		int counter =  p.getColumnMove() + 1;//check right	
 		int flipCount = 0;
 		while(counter < column) {//start while loop
@@ -218,7 +218,7 @@ public class Board {
 		}
 	}
 	
-	public boolean flipRowLeft(Player p , int row, int column) {//start Row
+	private boolean flipRowLeft(Player p , int row, int column) {//start Row
 		int Lcounter =  p.getColumnMove() - 1;//check right	
 		int flipCount = 0;
 		while(Lcounter > column) {//start while loop
@@ -246,7 +246,7 @@ public class Board {
 		}
 	}
 	
-	public boolean flipColumnDown(Player p , int row, int column) {//start Row
+	private boolean flipColumnDown(Player p , int row, int column) {//start Row
 		int counter =  p.getRowMove() + 1;//check right	
 		int flipCount = 0;
 		while(counter < row) {//start while loop
@@ -274,7 +274,7 @@ public class Board {
 		}
 	}
 	
-	public boolean flipColumnUp(Player p , int row, int column) {//start Row
+	private boolean flipColumnUp(Player p , int row, int column) {//start Row
 		int counter =  p.getRowMove() - 1;//check right	
 		int flipCount = 0;
 		while(counter > row) {//start while loop
@@ -304,7 +304,7 @@ public class Board {
 		}
 	}
 	
-	public boolean flipRLDiagUp(Player p , int row, int column) {//start Row
+	private boolean flipRLDiagUp(Player p , int row, int column) {//start Row
 		int RowCounter =  p.getRowMove() - 1;//checking row above
 		int ColumnCounter = p.getColumnMove() + 1;//checking column to the right
 		int flipCount = 0;
@@ -335,7 +335,7 @@ public class Board {
 		}
 	}
 	
-	public boolean flipRLDiagDown(Player p , int row, int column) {//start Row
+	private boolean flipRLDiagDown(Player p , int row, int column) {//start Row
 		int RowCounter =  p.getRowMove() + 1;//checking row above
 		int ColumnCounter = p.getColumnMove() - 1;//checking column to the right
 		int flipCount = 0;
@@ -368,7 +368,7 @@ public class Board {
 		}
 	}
 	
-	public boolean flipLRDiagDown(Player p , int row, int column) {//start Row
+	private boolean flipLRDiagDown(Player p , int row, int column) {//start Row
 		int RowCounter =  p.getRowMove() + 1;//checking row above
 		int ColumnCounter = p.getColumnMove() + 1;//checking column to the right
 		int flipCount = 0;
@@ -401,7 +401,7 @@ public class Board {
 	}
 
 	
-	public boolean flipLRDiagUp(Player p , int row, int column) {//start Row
+	private boolean flipLRDiagUp(Player p , int row, int column) {//start Row
 		int RowCounter =  p.getRowMove()-1;//checking row above
 		int ColumnCounter = p.getColumnMove()-1;//checking column to the right
 		int flipCount = 0;
