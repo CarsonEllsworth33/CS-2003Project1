@@ -106,11 +106,11 @@ public class Board {
 	public boolean checkTurnValidity(Player p) {
 		previous_pop = this.flipCheck(previous_pop, p);
 		if(board[p.getRowMove()][p.getColumnMove()].getState() != 0) {
-			System.out.println("Invalid move\nenter coorinates for a non occupied space");
+			System.out.println("Invalid move\nenter coorinates for a non occupied space next to an opponents disc");
 			return false;
 		}
 		if(this.nextTo(p) == false) {
-			System.out.println("Invalid move\nenter coordinates for a space with discs next to it");
+			System.out.println("Invalid move\nenter coordinates for a space with an opponents discs next to it");
 			return false;
 		}
 		
@@ -508,4 +508,98 @@ public class Board {
 	public boolean getGameOver() {
 		return gameOver;
 	}
+	
+	public boolean isInBounds(int num) {
+		if(num >= 8 || num <0) return false;
+		else return true;
+	}
+	
+	public boolean checkNextTo(Player p) {
+		int searchRow = p.getRowMove()-1;
+		int searchColumn = p.getColumnMove()+1;
+		int adjacentRow = searchRow;
+		int adjacentColumn = searchColumn;
+		boolean validMove = false;
+		for(int row = 1; row <=3; row++){
+			if(isInBounds(adjacentRow)) {
+				for(int column = 0; column <3; column++) {
+					adjacentColumn = searchColumn - column;
+					if(isInBounds(adjacentColumn)) {
+						if(board[adjacentRow][adjacentColumn].getState() == p.otherPlayer()) {
+							System.out.println("found opponent disc");
+							validMove = checkDirection(p,adjacentRow,adjacentColumn);
+						}
+						
+					}
+				}//end of column for loop
+			}
+			adjacentRow = searchRow + row;
+		}
+		return validMove;
+	}//end of checkNextTo
+	
+	public boolean checkDirection(Player p,int directionRow,int directionColumn) {
+		boolean validMove = false;
+		int searchRow = directionRow - p.getRowMove();//can either be -1 0 1 determining direction
+		int searchColumn = directionColumn -p.getColumnMove();//can either be -1 0 1 determining direction
+		int adjacentRow = searchRow;
+		int adjacentColumn = searchColumn;
+		while(isInBounds((p.getRowMove() + adjacentRow)) && isInBounds((p.getColumnMove() + adjacentColumn)) && board[(p.getRowMove() + adjacentRow)][(p.getColumnMove() + adjacentColumn)].getState() != p.getId()) {
+			if(board[(p.getRowMove() + adjacentRow)][(p.getColumnMove() + adjacentColumn)].getState() == p.getId()) {validMove = true;break;}
+			//validMove = true;
+			adjacentRow+=searchRow;
+			adjacentColumn+=searchColumn;
+		}
+		flipDirection(p,(p.getRowMove() + adjacentRow),(p.getColumnMove() + adjacentColumn));
+		return validMove;
+	}
+	
+	public void flipDirection(Player p,int directionRow,int directionColumn) {//if input of 4 ,3 then sR = 0 and sC = 2..... fix this
+		int searchRow = directionRow - p.getRowMove();//can either be -1 0 1 determining direction
+		int searchColumn = directionColumn -p.getColumnMove()-1;//can either be -1 0 1 determining direction
+		int adjacentRow = searchRow;
+		int adjacentColumn = searchColumn;
+		while(isInBounds((p.getRowMove() + adjacentRow)) && isInBounds((p.getColumnMove() + adjacentColumn)) && board[(p.getRowMove() + adjacentRow)][(p.getColumnMove() + adjacentColumn)].getState() != p.getId()) {
+			board[(p.getRowMove() + adjacentRow)][(p.getColumnMove() + adjacentColumn)].setState(p.getId());
+			adjacentRow+=searchRow;
+			adjacentColumn+=searchColumn;
+			
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }//end of Board class

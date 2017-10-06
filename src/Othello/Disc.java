@@ -37,6 +37,18 @@ public class Disc {
 	public String getCurrentColor() {
 		return currentColor;
 	}
+	/**
+	 * useless so far
+	 * @param directionRow
+	 * @param directionColumn
+	 * @param p
+	 * @return
+	 */
+	public boolean equalsTo(int directionRow, int directionColumn, Player p) {
+		if(directionRow == p.getRowMove() && directionColumn == p.getColumnMove()) return true;
+		else{return false;}
+	}
+	
 	
 	/**
 	 * Must put in a 1 or 0 for white or black respectively to set the state of a game disc
