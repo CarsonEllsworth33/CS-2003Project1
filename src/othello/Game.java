@@ -1,7 +1,7 @@
 /**
  * 
  */
-package Othello;
+package othello;
 import java.io.InputStream;
 import java.util.Scanner;
 /**
@@ -26,12 +26,14 @@ public class Game {
 	 * @param in
 	 * @return a string of what ever is put into the stream
 	 */
-	public String getInput(InputStream in) {
+	public String getStringInput(InputStream in) {
 		Scanner scanner = new Scanner(in);
 		input = scanner.nextLine();
 		return input;
 	}
+	
 	public void StartGame() {
+		GameModeSelection();
 		board.startState();
 		System.out.println("Welcome players to the game of Othello");
 		System.out.println("Let's play!");
@@ -44,6 +46,10 @@ public class Game {
 			//break;//test win condition
 		}
 		this.endGame();
+		
+	}
+	private void GameModeSelection() {
+		String getSelection = getStringInput(System.in);
 		
 	}
 	public void endGame() {

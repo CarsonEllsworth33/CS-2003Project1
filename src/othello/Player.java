@@ -1,4 +1,4 @@
-package Othello;
+package othello;
 import java.io.InputStream;
 import java.util.InputMismatchException;
 import java.util.Scanner;

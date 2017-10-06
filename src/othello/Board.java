@@ -1,4 +1,4 @@
-package Othello;
+package othello;
 public class Board {
 	private final int BOARD_WIDTH = 8;
 	private final int BOARD_HEIGHT = 8;
@@ -468,20 +468,12 @@ public class Board {
 			}
 			
 		}
-		if(nuetralSpace == 0 ) {
-			System.out.println("GAME OVER!!! THAT WAS FUN!!!");
-			this.gameOver = true;
-		}
-		if(playerOne == 0 ) {
+		if(playerOne == 0 ||nuetralSpace == 0||playerTwo == 0 ) {
 			this.toString();
 			System.out.println("GAME OVER!!! THAT WAS FUN!!!");
 			this.gameOver = true;
 		}
-		if(playerTwo == 0 ) {
-			this.toString();
-			System.out.println("GAME OVER!!! THAT WAS FUN!!!");
-			this.gameOver = true;
-		}
+		
 	}
 	/**
 	 * Method that currently rebuilds the board, but will eventually refresh the board after moves
@@ -513,7 +505,11 @@ public class Board {
 		if(num >= 8 || num <0) return false;
 		else return true;
 	}
-	
+	/**
+	 * A function for checking all directions around the player move
+	 * @param p
+	 * @return
+	 */
 	public boolean checkNextTo(Player p) {
 		int searchRow = p.getRowMove()-1;
 		int searchColumn = p.getColumnMove()+1;
