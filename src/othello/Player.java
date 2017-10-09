@@ -97,26 +97,20 @@ public class Player {
 			}
 			else {
 				System.out.println("this value is not an int between 1 - 8\nPlease input an acceptable value and try again");
-				System.out.println("trace 1.5");
+				System.out.println("trace 1");
 				turn(in);
 				return;
 			}
 			if(row > 8 || row <= 0 ||column <= 0 || column > 8) {
 				System.out.println("this value is not an int between 1 - 8\nPlease input an acceptable value and try again");
-				System.out.println("trace 1");
+				System.out.println("trace 2");
 				turn(in);
 				return;
 			}
 		}
 		catch (InputMismatchException e) {
-			
-			/*if((quit = scanner.nextLine()).equals("quit") && quit instanceof String) {
-				System.out.println("will eventually make it so the game ends");
-				quitCon = true;
-				return;
-			}*/
 			System.out.println("this value is not an int between 1 - 8\nPlease input an acceptable value and try again");
-			System.out.println("trace 2");
+			System.out.println("trace 3");
 			turn(in);
 			return;
 		}

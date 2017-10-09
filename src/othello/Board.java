@@ -4,6 +4,8 @@ public class Board {
 	private final int BOARD_HEIGHT = 8;
 	private int previous_pop = 0;
 	private int current_pop = 0;
+	private int blackScore = 0;
+	private int whiteScore = 0;
 	private boolean gameOver = false;
 	private Disc[][] board = new Disc[BOARD_HEIGHT][BOARD_WIDTH];
 	/**
@@ -66,7 +68,7 @@ public class Board {
 		if(p.getQuitCon() == true) {
 			this.quitGame(p);
 			this.gameOver = true;
-			this.updateBoard();
+			//this.updateBoard();
 			return;
 		}
 		if(this.checkTurnValidity(p) == true) {
@@ -425,7 +427,6 @@ public class Board {
 				if(board[row][column].getState() == 1) playerOneDiscs++;
 				if(board[row][column].getState() == 2) playerTwoDiscs++;
 			}
-			
 		}
 		if(p.getId() == 1) {
 			pop = playerOneDiscs;
@@ -433,25 +434,22 @@ public class Board {
 		else if(p.getId() == 2) {
 			pop = playerTwoDiscs;
 		}
-		
 		return pop;
 	}
-	
-	
 	
 	/**
 	 * reports the score of a player passed by reference
 	 * @param p
 	 * @return Score of player p
 	 */
-	public int Score(Player p) {
-		int score = 0;
+	public void Score() {
 		for(int row = 0; row < BOARD_HEIGHT; row++) {
 			for(int column = 0; column < BOARD_WIDTH; column++) {
-				if(board[row][column].getState() == p.getId()) score++;
+				if(board[row][column].getCurrentColor() == "B") blackScore++;
+				if(board[row][column].getCurrentColor() == "W") whiteScore++;
 			}
 		}
-		return score;
+		System.out.printf("player 1(black) scored %d and player 2(white) scored %d%nthat was a fun game",this.getBlackScore(),this.getWhiteScore());
 	}
 	/**
 	 * this method checks for any neutral discs left in the array
@@ -475,35 +473,21 @@ public class Board {
 		}
 		
 	}
-	/**
-	 * Method that currently rebuilds the board, but will eventually refresh the board after moves
-	 */
-	public void updateBoard() {
-	this.toString();
-	}//end of update board method
-	
-	
-	public void startState() {
-		board[3][3] = new Disc(1);
-		board[3][4] = new Disc(2);
-		board[4][4] = new Disc(1);
-		board[4][3] = new Disc(2);
-		
-	}
-	public int getBOARD_WIDTH() {
-		return BOARD_WIDTH;
-	}
 
-	public int getBOARD_HEIGHT() {
-		return BOARD_HEIGHT;
-	}
-	public boolean getGameOver() {
-		return gameOver;
-	}
 	
 	public boolean isInBounds(int num) {
 		if(num >= 8 || num <0) return false;
 		else return true;
+	}
+	/**
+	 * checks to see whether the player piece is in the board bounds
+	 * @param row
+	 * @param column
+	 * @return
+	 */
+	public boolean isInBounds(int row, int column) {
+		if((row < 8 || row >=0 ) && (column < 8 || column >= 0)) return true;
+		else return false;
 	}
 	/**
 	 * A function for checking all directions around the player move
@@ -534,7 +518,7 @@ public class Board {
 		return validMove;
 	}//end of checkNextTo
 	
-	public boolean checkDirection(Player p,int directionRow,int directionColumn) {
+	private boolean checkDirection(Player p,int directionRow,int directionColumn) {
 		boolean validMove = false;
 		int searchRow = directionRow - p.getRowMove();//can either be -1 0 1 determining direction
 		int searchColumn = directionColumn -p.getColumnMove();//can either be -1 0 1 determining direction
@@ -550,7 +534,7 @@ public class Board {
 		return validMove;
 	}
 	
-	public void flipDirection(Player p,int directionRow,int directionColumn) {//if input of 4 ,3 then sR = 0 and sC = 2..... fix this
+	private void flipDirection(Player p,int directionRow,int directionColumn) {//if input of 4 ,3 then sR = 0 and sC = 2..... fix this
 		int searchRow = directionRow - p.getRowMove();//can either be -1 0 1 determining direction
 		int searchColumn = directionColumn -p.getColumnMove()-1;//can either be -1 0 1 determining direction
 		int adjacentRow = searchRow;
@@ -562,40 +546,45 @@ public class Board {
 			
 		}
 	}
+	public boolean validMove(int row, int column, Player p, int dRow, int dColumn, boolean flip) {
+		if(board[row][column].getState() != 0)return false;
+		row+=dRow;
+		column+=dColumn;
+		if(!this.isInBounds(row, column))return false;//checking board bounds
+		return true;//place holder
+	}
+	/**
+	 * Method that refresh the board after moves
+	 */
+	public void updateBoard() {
+	this.toString();
+	}//end of update board method
 	
+	public void startState() {
+		board[3][3] = new Disc(1);
+		board[3][4] = new Disc(2);
+		board[4][4] = new Disc(1);
+		board[4][3] = new Disc(2);
+		
+	}
 	
+	public int getBlackScore() {
+		return blackScore;
+	}
+
+	public int getWhiteScore() {
+		return whiteScore;
+	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public int getBOARD_WIDTH() {
+		return BOARD_WIDTH;
+	}
+
+	public int getBOARD_HEIGHT() {
+		return BOARD_HEIGHT;
+	}
+	public boolean getGameOver() {
+		return gameOver;
+	}
 	
 }//end of Board class
