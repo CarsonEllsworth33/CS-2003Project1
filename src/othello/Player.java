@@ -81,7 +81,7 @@ public class Player {
 				return;
 			}
 			else if(scanner.hasNext(pass)) {
-				System.out.printf("Player %s has passed their turn",this.getId());
+				System.out.printf("%s player has passed their turn",this.getPlayerColor());
 				passCon = true;
 				return;
 			}

@@ -2,8 +2,7 @@ package othello;
 public class Board {
 	private final int BOARD_WIDTH = 8;
 	private final int BOARD_HEIGHT = 8;
-	private int previous_pop = 0;
-	private int current_pop = 0;
+	private int flippedDisc = 0;
 	private int blackScore = 0;
 	private int whiteScore = 0;
 	private boolean gameOver = false;
@@ -71,15 +70,38 @@ public class Board {
 			//this.updateBoard();
 			return;
 		}
-		if(this.checkTurnValidity(p) == true) {
-		board[p.getRowMove()][p.getColumnMove()].setState(p.getId());	
+		flippedDisc = 0;//resets the value of flippedDisc to see if any discs are claimed as player
+		if(this.checkMoves(p) == true) {
+			return;
 		}
 		else {
 		this.takeTurn(p);
 		}
+		
 	}
 	
-	
+	private boolean checkMoves(Player p) {
+		if(board[p.getRowMove()][p.getColumnMove()].getState() != 0)return false;
+		if(board[p.getRowMove()][p.getColumnMove()].getState() == p.getId())return false;
+		if(this.validMove(p.getRowMove(), p.getColumnMove(), p, 0, 1)) {//checking to the right
+			this.flipDirection(p.getRowMove(), p.getColumnMove(), p, 0, 1);}
+		if(this.validMove(p.getRowMove(), p.getColumnMove(), p, 0, -1)){//checking to the left
+			this.flipDirection(p.getRowMove(), p.getColumnMove(), p, 0, -1);}
+		if(this.validMove(p.getRowMove(), p.getColumnMove(), p, 1, 0)) {//checking down
+			this.flipDirection(p.getRowMove(), p.getColumnMove(), p, 1, 0);}
+		if(this.validMove(p.getRowMove(), p.getColumnMove(), p, -1, 0)){//checking up
+			this.flipDirection(p.getRowMove(), p.getColumnMove(), p, -1, 0);}
+		if(this.validMove(p.getRowMove(), p.getColumnMove(), p, 1, 1)) {//checking down right
+			this.flipDirection(p.getRowMove(), p.getColumnMove(), p, 1, 1);}
+		if(this.validMove(p.getRowMove(), p.getColumnMove(), p, 1, -1)){//checking down left
+			this.flipDirection(p.getRowMove(), p.getColumnMove(), p, 1, -1);}
+		if(this.validMove(p.getRowMove(), p.getColumnMove(), p, -1, 1)){//checking up right
+			this.flipDirection(p.getRowMove(), p.getColumnMove(), p, -1, 1);}
+		if(this.validMove(p.getRowMove(), p.getColumnMove(), p, -1, -1)) {//checking up left
+			this.flipDirection(p.getRowMove(), p.getColumnMove(), p, -1, -1);}
+		if(flippedDisc == 0) {return false;}//if no change then the move is not a valid one
+		return true;
+	}
 	
 	/**
 	 * method for quitting the game if a player is done
@@ -104,324 +126,10 @@ public class Board {
 	}
 	
 	
-	
-	public boolean checkTurnValidity(Player p) {
-		previous_pop = this.flipCheck(previous_pop, p);
-		if(board[p.getRowMove()][p.getColumnMove()].getState() != 0) {
-			System.out.println("Invalid move\nenter coorinates for a non occupied space next to an opponents disc");
-			return false;
-		}
-		if(this.nextTo(p) == false) {
-			System.out.println("Invalid move\nenter coordinates for a space with an opponents discs next to it");
-			return false;
-		}
-		
-		current_pop = this.flipCheck(current_pop, p);
-		System.out.println(previous_pop);
-		System.out.println(current_pop);
-		if(current_pop == previous_pop) {
-			System.out.println("Please place a disc in a spot that will flip at least one opposing disc");
-			return false;
-		}
-		return true;
-	}
-	
-	
-	
-	
-	/**
-	 * reports the pieces next to the player from the possible at maximum 8 spaces surrounding the players disc 
-	 * @param p
-	 */
-	public boolean nextTo(Player p) {
-		boolean validMove = false;
-		//checking if upper left corner next to player is in play and then if so then it checks to see if it belongs to another player
-		if(p.getRowMove()-1 >= 0 && p.getColumnMove()-1 >= 0 && board[p.getRowMove()-1][p.getColumnMove()-1].getState() == p.otherPlayer()) {
-			this.checkLRDiagUp(p);
-			validMove = true;
-		}
-		//checking if upper right corner next to player is in play and then if so then it checks to see if it belongs to another player
-		if(p.getRowMove()-1 >=0  && p.getColumnMove()+1 < 8 && board[p.getRowMove()-1][p.getColumnMove()+1].getState() == p.otherPlayer()) {
-			this.checkRLDiagUp(p);
-			validMove = true;
-		}
-		//checking if cell above the player is in play and then if so then it checks to see if it belongs to another player
-		if(p.getRowMove()-1 >= 0 && p.getColumnMove() >= 0 && board[p.getRowMove()-1][p.getColumnMove()].getState() == p.otherPlayer()) {
-			this.checkColumnUp(p);
-			validMove = true;
-		}
-		//checking if lower left corner next to player is in play and then if so then it checks to see if it belongs to another player
-		if(p.getRowMove()+1 < 8 && p.getColumnMove() -1 >= 0 && board[p.getRowMove()+1][p.getColumnMove()-1].getState() == p.otherPlayer()) {
-			this.checkRLDiagDown(p);
-			validMove = true;
-		}
-		//checking if lower right corner next to player is in play and then if so then it checks to see if it belongs to another player
-		if(p.getRowMove()+1 < 8 && p.getColumnMove() +1 < 8 && board[p.getRowMove()+1][p.getColumnMove()+1].getState() == p.otherPlayer()) {
-			this.checkLRDiagDown(p);
-			validMove = true;
-		}
-		//checking if cell below the player is in play and then if so then it checks to see if it belongs to another player
-		if(p.getRowMove()+1 < 8 && p.getColumnMove() >= 0 && board[p.getRowMove()+1][p.getColumnMove()].getState() == p.otherPlayer()) {
-			this.checkColumnDown(p);
-			validMove = true;
-		}
-		//checking if cell to the left of the player is in play and then if so then it checks to see if it belongs to another player
-		if(p.getColumnMove()-1 >= 0 && board[p.getRowMove()][p.getColumnMove()-1].getState() == p.otherPlayer()) {
-			this.checkRowLeft(p);
-			validMove = true;
-		}
-		//checking if cell to the right of the player is in play and then if so then it checks to see if it belongs to another player
-		if(p.getColumnMove()+1 < 8 && board[p.getRowMove()][p.getColumnMove()+1].getState() == p.otherPlayer()) {
-			this.checkRowRight(p);
-			validMove = true;
-		}
-		return validMove;
-	}
-	
-	
-	/**
-	 * checks the row the player is in starting to the right of the player for another player disc
-	 * @param p
-	 */
-	public void checkRowRight(Player p) {//start Row
-		int counter =  p.getColumnMove() + 1;//check right	
-		while( p.getRowMove() < 8 && counter < 8) {//start while loop
-			if(board[p.getRowMove()][counter].getState() == p.getId()) {
-				this.flipRowRight(p, p.getRowMove(), counter);
-			}
-			counter++;		
-		}
-	}
-	
-	private boolean flipRowRight(Player p , int row, int column) {//start Row
-		int counter =  p.getColumnMove() + 1;//check right	
-		int flipCount = 0;
-		while(counter < column) {//start while loop
-			board[row][counter].setState(p.getId());
-			counter++;
-		}
-		if(flipCount == 0) {
-			return false;
-		}
-		return true;
-	}
-	
-	/**
-	 * checks the row the player is in starting to the left of the player 
-	 * @param p
-	 */
-	public void checkRowLeft(Player p) {
-		int Lcounter = p.getColumnMove() - 1;//check left
-		while(p.getRowMove() >=0 && Lcounter >=0) {//start while loop
-			if(board[p.getRowMove()][Lcounter].getState() == p.getId()) {
-				this.flipRowLeft(p, p.getRowMove(), Lcounter);
-			}
-			Lcounter--;
-		}
-	}
-	
-	private boolean flipRowLeft(Player p , int row, int column) {//start Row
-		int Lcounter =  p.getColumnMove() - 1;//check right	
-		int flipCount = 0;
-		while(Lcounter > column) {//start while loop
-			board[row][Lcounter].setState(p.getId());
-			Lcounter--;
-		}
-		if(flipCount == 0) {
-			return false;
-		}
-		return true;
-	}
-	
-	
-	/**
-	 * checks the column the player is in starting below the player 
-	 * @param p
-	 */
-	public void checkColumnDown(Player p) {//start checkColumn
-		int counter =  p.getRowMove() + 1;//check right
-		while(counter < 8) {
-			if(board[counter][p.getColumnMove()].getState() == p.getId()) {
-				this.flipColumnDown(p,counter,p.getColumnMove());
-			}	
-			counter++;	
-		}
-	}
-	
-	private boolean flipColumnDown(Player p , int row, int column) {//start Row
-		int counter =  p.getRowMove() + 1;//check right	
-		int flipCount = 0;
-		while(counter < row) {//start while loop
-			board[counter][column].setState(p.getId());
-			counter++;
-		}
-		if(flipCount == 0) {
-			return false;
-		}
-		return true;
-	}
-	
-	
-	/**
-	 * checks the column the player is in starting above the player 
-	 * @param p
-	 */
-	public void checkColumnUp(Player p) {
-		int Lcounter = p.getRowMove() - 1;//check l
-		while(Lcounter >= 0) {//start while loop
-			if(board[Lcounter][p.getColumnMove()].getState() == p.getId()) {
-				this.flipColumnUp(p, Lcounter, p.getColumnMove());
-			}
-			Lcounter--;
-		}
-	}
-	
-	private boolean flipColumnUp(Player p , int row, int column) {//start Row
-		int counter =  p.getRowMove() - 1;//check right	
-		int flipCount = 0;
-		while(counter > row) {//start while loop
-			board[counter][column].setState(p.getId());
-			counter--;
-		}
-		if(flipCount == 0) {
-			return false;
-		}
-		return true;
-	}
-	
-	
-	/**
-	 * This checks the Diagonal From right to left starting on the upper right corner of the player move
-	 * @param p
-	 */
-	public void checkRLDiagUp(Player p) {//start checkRLDiag
-		int RowCounter =  p.getRowMove() - 1;//checking row above
-		int ColumnCounter = p.getColumnMove() + 1;//checking column to the right
-		while( ColumnCounter < 8 && RowCounter >=0) {//start while loop for going center to right
-			if(board[RowCounter][ColumnCounter].getState() == p.getId()) {
-				this.flipRLDiagUp(p,RowCounter,ColumnCounter);
-			}
-			RowCounter--;
-			ColumnCounter++;
-		}
-	}
-	
-	private boolean flipRLDiagUp(Player p , int row, int column) {//start Row
-		int RowCounter =  p.getRowMove() - 1;//checking row above
-		int ColumnCounter = p.getColumnMove() + 1;//checking column to the right
-		int flipCount = 0;
-		while(RowCounter > row && ColumnCounter < column  ) {//start while loop
-			board[RowCounter][ColumnCounter].setState(p.getId());
-			RowCounter--;
-			ColumnCounter++;
-		}
-		if(flipCount == 0) {
-			return false;
-		}
-		return true;
-	}
-	
-	/**
-	 * This checks the Diagonal From right to left starting on the bottom left corner of the player move
-	 * @param p
-	 */
-	public void checkRLDiagDown(Player p) {
-		int LColumnCounter = p.getColumnMove() - 1;
-		int LRowCounter = p.getRowMove() + 1;
-		while(LColumnCounter >= 0 && LRowCounter <8) {
-			if(board[LRowCounter][LColumnCounter].getState() == p.getId()) {
-				this.flipRLDiagDown(p, LRowCounter, LColumnCounter);
-			}
-			LRowCounter++;
-			LColumnCounter--;
-		}
-	}
-	
-	private boolean flipRLDiagDown(Player p , int row, int column) {//start Row
-		int RowCounter =  p.getRowMove() + 1;//checking row above
-		int ColumnCounter = p.getColumnMove() - 1;//checking column to the right
-		int flipCount = 0;
-		while(RowCounter < row && ColumnCounter >= column  ) {//start while loop
-			board[RowCounter][ColumnCounter].setState(p.getId());
-			RowCounter++;
-			ColumnCounter--;
-		}
-		if(flipCount == 0) {
-			return false;
-		}
-		return true;
-	}
-	
-	
-	
-	/**
-	 * This checks the Diagonal From left to right starting on the bottom right corner of the player move
-	 * @param p
-	 */
-	public void checkLRDiagDown(Player p) {												
-		int RowCounter =  p.getRowMove() + 1;										
-		int ColumnCounter = p.getColumnMove() + 1;									
-		while( ColumnCounter < 8 && RowCounter < 8) {//start while loop for going center to right
-			if(board[RowCounter][ColumnCounter].getState() == p.getId()) {
-				this.flipLRDiagDown(p, RowCounter, ColumnCounter);
-			}
-			RowCounter++;
-			ColumnCounter++;
-		}
-	}
-	
-	private boolean flipLRDiagDown(Player p , int row, int column) {//start Row
-		int RowCounter =  p.getRowMove() + 1;//checking row above
-		int ColumnCounter = p.getColumnMove() + 1;//checking column to the right
-		int flipCount = 0;
-		while(RowCounter < row && ColumnCounter < column  ) {//start while loop
-			board[RowCounter][ColumnCounter].setState(p.getId());
-			RowCounter--;
-			ColumnCounter++;
-		}
-		if(flipCount == 0) {
-			return false;
-		}
-		return true;
-	}
-	
-	
-	/**
-	 * This checks the Diagonal From left to right starting on the upper left corner of the player move
-	 * @param p
-	 */
-	public void checkLRDiagUp(Player p) {
-		int LColumnCounter = p.getColumnMove() - 1;//check left
-		int LRowCounter = p.getRowMove() - 1;//check left
-		while(LColumnCounter >=0 && LRowCounter >=0) {//start while loop	
-			if(board[LRowCounter][LColumnCounter].getState() == p.getId()) {
-				this.flipLRDiagUp(p, LRowCounter, LColumnCounter);
-			}
-			LRowCounter--;
-			LColumnCounter--;
-		}
-	}
-
-	
-	private boolean flipLRDiagUp(Player p , int row, int column) {//start Row
-		int RowCounter =  p.getRowMove()-1;//checking row above
-		int ColumnCounter = p.getColumnMove()-1;//checking column to the right
-		int flipCount = 0;
-		while(RowCounter > row && ColumnCounter > column  ) {//start while loop
-			board[RowCounter][ColumnCounter].setState(p.getId());
-			RowCounter--;
-			ColumnCounter++;
-		}
-		if(flipCount == 0) {
-			return false;
-		}
-		return true;
-	}
-	
-	
 	public int flipCheck(int pop,Player p) {
 		int playerOneDiscs = 0;
 		int playerTwoDiscs = 0;
+		
 		for(int row = 0; row < BOARD_HEIGHT; row++) {
 			for(int column = 0; column < BOARD_WIDTH; column++) {//counts how many spaces are unclaimed
 				if(board[row][column].getState() == 1) playerOneDiscs++;
@@ -489,69 +197,24 @@ public class Board {
 		if((row < 8 || row >=0 ) && (column < 8 || column >= 0)) return true;
 		else return false;
 	}
-	/**
-	 * A function for checking all directions around the player move
-	 * @param p
-	 * @return
-	 */
-	public boolean checkNextTo(Player p) {
-		int searchRow = p.getRowMove()-1;
-		int searchColumn = p.getColumnMove()+1;
-		int adjacentRow = searchRow;
-		int adjacentColumn = searchColumn;
-		boolean validMove = false;
-		for(int row = 1; row <=3; row++){
-			if(isInBounds(adjacentRow)) {
-				for(int column = 0; column <3; column++) {
-					adjacentColumn = searchColumn - column;
-					if(isInBounds(adjacentColumn)) {
-						if(board[adjacentRow][adjacentColumn].getState() == p.otherPlayer()) {
-							System.out.println("found opponent disc");
-							validMove = checkDirection(p,adjacentRow,adjacentColumn);
-						}
-						
-					}
-				}//end of column for loop
-			}
-			adjacentRow = searchRow + row;
-		}
-		return validMove;
-	}//end of checkNextTo
 	
-	private boolean checkDirection(Player p,int directionRow,int directionColumn) {
-		boolean validMove = false;
-		int searchRow = directionRow - p.getRowMove();//can either be -1 0 1 determining direction
-		int searchColumn = directionColumn -p.getColumnMove();//can either be -1 0 1 determining direction
-		int adjacentRow = searchRow;
-		int adjacentColumn = searchColumn;
-		while(isInBounds((p.getRowMove() + adjacentRow)) && isInBounds((p.getColumnMove() + adjacentColumn)) && board[(p.getRowMove() + adjacentRow)][(p.getColumnMove() + adjacentColumn)].getState() != p.getId()) {
-			if(board[(p.getRowMove() + adjacentRow)][(p.getColumnMove() + adjacentColumn)].getState() == p.getId()) {validMove = true;break;}
-			//validMove = true;
-			adjacentRow+=searchRow;
-			adjacentColumn+=searchColumn;
-		}
-		flipDirection(p,(p.getRowMove() + adjacentRow),(p.getColumnMove() + adjacentColumn));
-		return validMove;
-	}
-	
-	private void flipDirection(Player p,int directionRow,int directionColumn) {//if input of 4 ,3 then sR = 0 and sC = 2..... fix this
-		int searchRow = directionRow - p.getRowMove();//can either be -1 0 1 determining direction
-		int searchColumn = directionColumn -p.getColumnMove()-1;//can either be -1 0 1 determining direction
-		int adjacentRow = searchRow;
-		int adjacentColumn = searchColumn;
-		while(isInBounds((p.getRowMove() + adjacentRow)) && isInBounds((p.getColumnMove() + adjacentColumn)) && board[(p.getRowMove() + adjacentRow)][(p.getColumnMove() + adjacentColumn)].getState() != p.getId()) {
-			board[(p.getRowMove() + adjacentRow)][(p.getColumnMove() + adjacentColumn)].setState(p.getId());
-			adjacentRow+=searchRow;
-			adjacentColumn+=searchColumn;
-			
-		}
-	}
-	public boolean validMove(int row, int column, Player p, int dRow, int dColumn, boolean flip) {
-		if(board[row][column].getState() != 0)return false;
+	public boolean validMove(int row, int column, Player p, int dRow, int dColumn) {
+		System.out.println("spot is empty");
 		row+=dRow;
 		column+=dColumn;
 		if(!this.isInBounds(row, column))return false;//checking board bounds
-		return true;//place holder
+		for(;isInBounds(row,column); row+=dRow,column+=dColumn) {
+			if(board[row][column].getState() == p.getId())return true;
+			if(board[row][column].getState() == 0)return false;//checks to see if it is empty
+		}
+		return false;
+	}
+	private void flipDirection(int row, int column, Player p, int dRow, int dColumn) {
+		board[row][column].setState(p.getId());
+		for(;board[row+dRow][column+dColumn].getState() != p.getId(); row+=dRow,column+=dColumn) {
+			board[row+dRow][column+dColumn].setState(p.getId());
+			flippedDisc++;
+		}
 	}
 	/**
 	 * Method that refresh the board after moves
