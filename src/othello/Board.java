@@ -28,9 +28,6 @@ public class Board {
 		}//end of row for loop
 	}
 	
-	
-	
-	
 	/**
 	 * overrides standard toString to print out the board
 	 */
@@ -80,7 +77,7 @@ public class Board {
 		
 	}
 	
-	private boolean checkMoves(Player p) {
+	public boolean checkMoves(Player p) {
 		if(board[p.getRowMove()][p.getColumnMove()].getState() != 0)return false;
 		if(board[p.getRowMove()][p.getColumnMove()].getState() == p.getId())return false;
 		if(this.validMove(p.getRowMove(), p.getColumnMove(), p, 0, 1)) {//checking to the right
@@ -199,7 +196,6 @@ public class Board {
 	}
 	
 	public boolean validMove(int row, int column, Player p, int dRow, int dColumn) {
-		System.out.println("spot is empty");
 		row+=dRow;
 		column+=dColumn;
 		if(!this.isInBounds(row, column))return false;//checking board bounds
@@ -248,6 +244,9 @@ public class Board {
 	}
 	public boolean getGameOver() {
 		return gameOver;
+	}
+	public Disc[][] getBoard(){
+		return board;
 	}
 	
 }//end of Board class

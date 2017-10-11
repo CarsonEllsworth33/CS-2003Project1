@@ -11,6 +11,7 @@ import java.util.Scanner;
 public class Game {
 	
 	private String input;
+	private int intOutput =0;
 	private Board board = new Board();
 	
 	/**
@@ -40,17 +41,27 @@ public class Game {
 		this.endGame();
 	}
 	
+	
 	private void onePlayerGame() {
 		Player player1 = new Player(2);
-	    Computer player2 = new Computer(1);
-		// TODO Auto-generated method stub
+	    Computer player2 = new Computer(1,board);
+	    board.startState();
 		System.out.println("test one player works");
 	}
+	
 	private void monteCarloSim() {
-		Computer player1 = new Computer(2);
-	    Computer player2 = new Computer(1);
-		// TODO Auto-generated method stub
-		System.out.println("test sim works");
+		int count = 0;
+		Computer player1 = new Computer(2,board);
+	    Computer player2 = new Computer(1,board);
+	    board.startState();
+	    System.out.println("Welcome to the Monte Carlo Simulator... \nPlease input a valid positive int for the desired amount of test results\nAmmount of runs: ");
+	    for(int i = getIntInput(System.in);i>0;i--) {
+	    player1.turn(board.getBoard());
+	    player2.turn(board.getBoard());
+	    count++;
+	    }
+	    System.out.println("the count is: "+ count);
+		
 	}
 	
 	
@@ -81,6 +92,27 @@ public class Game {
 			board.Score();
 			}
 	
+	
+	
+	public int getIntInput(InputStream in) {
+		Scanner scanner = new Scanner(in);
+		if(scanner.hasNextInt()) {
+			intOutput = scanner.nextInt();
+			if(intOutput > 0)return intOutput;
+			else {System.out.println("you cannot run zero or negative ammounts of tests\nplease put in a positive int");getIntInput(in);}
+		}
+		else if((scanner.next() instanceof String)) {
+			System.out.println("trace 0");
+			System.out.println("this value is not a positive int\nPlease input an acceptable value and try again");
+			getIntInput(in);
+		}
+		else {
+			System.out.println("trace 1");
+			System.out.println("this value is not a positive int\nPlease input an acceptable value and try again");
+			getIntInput(in);
+		}
+		return intOutput;
+	}
 	/**
 	 * main function to run othello
 	 * @param args
@@ -90,7 +122,5 @@ public class Game {
 		Game othello = new Game();
 		othello.gameModeSelection();;
 	}//end main
-	
-	
 	
 }
