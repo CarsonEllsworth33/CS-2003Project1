@@ -5,10 +5,13 @@ public class Disc {
 	private String white = "W";
 	private String black = "B";
 	private String currentColor = "_";
+	private int row;
+	private int column;
 	
-	
-	public Disc (int id) {
+	public Disc (int id,int row,int column) {
 		setState(id);
+		this.setRow(row);
+		this.setColumn(column);
 	}
 	/**
 	 * This method takes in the current state of a disc and flips the disc to the opposite color
@@ -79,6 +82,18 @@ public class Disc {
 	 * this method makes the board appear empty
 	 * @return
 	 */
+	public int getColumn() {
+		return column;
+	}
+	private void setColumn(int column) {
+		this.column = column;
+	}
+	public int getRow() {
+		return row;
+	}
+	private void setRow(int row) {
+		this.row = row;
+	}
 	
 		
 	}//end of class Disc

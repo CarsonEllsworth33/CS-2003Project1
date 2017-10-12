@@ -21,9 +21,8 @@ public class Board {
 	 */
 	public void populate() {
 		for(int row = 0; row < BOARD_HEIGHT; row++) {
-			
 			for(int column = 0; column < BOARD_WIDTH; column++) {
-				board[row][column] = new Disc(0);
+				board[row][column] = new Disc(0,row,column);
 			}//end of column for loop
 		}//end of row for loop
 	}
@@ -80,21 +79,21 @@ public class Board {
 	public boolean checkMoves(Player p) {
 		if(board[p.getRowMove()][p.getColumnMove()].getState() != 0)return false;
 		if(board[p.getRowMove()][p.getColumnMove()].getState() == p.getId())return false;
-		if(this.validMove(p.getRowMove(), p.getColumnMove(), p, 0, 1)) {//checking to the right
+		if(this.validateMove(p.getRowMove(), p.getColumnMove(), p, 0, 1)) {//checking to the right
 			this.flipDirection(p.getRowMove(), p.getColumnMove(), p, 0, 1);}
-		if(this.validMove(p.getRowMove(), p.getColumnMove(), p, 0, -1)){//checking to the left
+		if(this.validateMove(p.getRowMove(), p.getColumnMove(), p, 0, -1)){//checking to the left
 			this.flipDirection(p.getRowMove(), p.getColumnMove(), p, 0, -1);}
-		if(this.validMove(p.getRowMove(), p.getColumnMove(), p, 1, 0)) {//checking down
+		if(this.validateMove(p.getRowMove(), p.getColumnMove(), p, 1, 0)) {//checking down
 			this.flipDirection(p.getRowMove(), p.getColumnMove(), p, 1, 0);}
-		if(this.validMove(p.getRowMove(), p.getColumnMove(), p, -1, 0)){//checking up
+		if(this.validateMove(p.getRowMove(), p.getColumnMove(), p, -1, 0)){//checking up
 			this.flipDirection(p.getRowMove(), p.getColumnMove(), p, -1, 0);}
-		if(this.validMove(p.getRowMove(), p.getColumnMove(), p, 1, 1)) {//checking down right
+		if(this.validateMove(p.getRowMove(), p.getColumnMove(), p, 1, 1)) {//checking down right
 			this.flipDirection(p.getRowMove(), p.getColumnMove(), p, 1, 1);}
-		if(this.validMove(p.getRowMove(), p.getColumnMove(), p, 1, -1)){//checking down left
+		if(this.validateMove(p.getRowMove(), p.getColumnMove(), p, 1, -1)){//checking down left
 			this.flipDirection(p.getRowMove(), p.getColumnMove(), p, 1, -1);}
-		if(this.validMove(p.getRowMove(), p.getColumnMove(), p, -1, 1)){//checking up right
+		if(this.validateMove(p.getRowMove(), p.getColumnMove(), p, -1, 1)){//checking up right
 			this.flipDirection(p.getRowMove(), p.getColumnMove(), p, -1, 1);}
-		if(this.validMove(p.getRowMove(), p.getColumnMove(), p, -1, -1)) {//checking up left
+		if(this.validateMove(p.getRowMove(), p.getColumnMove(), p, -1, -1)) {//checking up left
 			this.flipDirection(p.getRowMove(), p.getColumnMove(), p, -1, -1);}
 		if(flippedDisc == 0) {return false;}//if no change then the move is not a valid one
 		return true;
@@ -195,7 +194,7 @@ public class Board {
 		else return false;
 	}
 	
-	public boolean validMove(int row, int column, Player p, int dRow, int dColumn) {
+	public boolean validateMove(int row, int column, Player p, int dRow, int dColumn) {
 		row+=dRow;
 		column+=dColumn;
 		if(!this.isInBounds(row, column))return false;//checking board bounds
@@ -220,10 +219,10 @@ public class Board {
 	}//end of update board method
 	
 	public void startState() {
-		board[3][3] = new Disc(1);
-		board[3][4] = new Disc(2);
-		board[4][4] = new Disc(1);
-		board[4][3] = new Disc(2);
+		board[3][3].setState(1);
+		board[3][4].setState(2);
+		board[4][4].setState(1);
+		board[4][3].setState(2);
 		
 	}
 	
