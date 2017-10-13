@@ -4,6 +4,10 @@
 package othello;
 import java.io.InputStream;
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.IOException;
 /**
  * @author ellsc
  *
@@ -46,22 +50,59 @@ public class Game {
 		Player player1 = new Player(2);
 	    Computer player2 = new Computer(1,board);
 	    board.startState();
+	    while(board.getGameOver() == false){
+    		board.takeTurn(player1);
+    		board.toString();
+    		try {
+				Thread.sleep(1250);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    		player2.turn(board.getBoard());
+    		System.out.printf("white player chose row: %d column: %d%n",player2.getRowMove(),player2.getColumnMove());
+    	}
 		System.out.println("test one player works");
 	}
 	
 	private void monteCarloSim() {
-		int count = 0;
-		Computer player1 = new Computer(2,board);
-	    Computer player2 = new Computer(1,board);
-	    board.startState();
-	    System.out.println("Welcome to the Monte Carlo Simulator... \nPlease input a valid positive int for the desired amount of test results\nAmmount of runs: ");
-	    for(int i = getIntInput(System.in);i>0;i--) {
-	    player1.turn(board.getBoard());
-	    player2.turn(board.getBoard());
-	    count++;
-	    }
-	    System.out.println("the count is: "+ count);
+		File file = new File("Scores.txt");
+		try {
+			if(!file.exists()) {
+				try {
+					file.createNewFile();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			PrintWriter pw = new PrintWriter(file);
+			int count = 0;
+			Computer player1 = new Computer(2,board);
+		    Computer player2 = new Computer(1,board);
+		    System.out.println("Welcome to the Monte Carlo Simulator... \nPlease input a valid positive int for the desired amount of test results\nAmmount of runs: ");
+		    for(int i = getIntInput(System.in);i>0;i--) {
+			    board.populate();
+			    board.startState();
+		    	while(board.getGameOver() == false){
+		    		player1.turn(board.getBoard());
+		    		player2.turn(board.getBoard());
+		    	}
+		    	count++;
+		    	String message = String.format("Run#:, %d, %s",count,this.endGame());
+		    	pw.println(message);
+		    }
+		    pw.close();
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+		finally {
+			System.out.println("\n\nCompleted");
+		}
+	    	
 	}
 	
 	
@@ -88,8 +129,8 @@ public class Game {
 	}
 	
 	
-	public void endGame() {
-			board.Score();
+	public String endGame() {
+			return board.Score();
 			}
 	
 	

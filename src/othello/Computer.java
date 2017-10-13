@@ -18,10 +18,18 @@ public class Computer extends Player {
 	}
 	public void turn(Disc[][] gameBoard) {
 		findBounds(gameBoard);
-		Random rand = new Random();
-		int index = rand.nextInt(list.size());
-		System.out.printf("%s player chose the row %d and column %d%n",this.getPlayerColor(),list.get(index).getRow(),list.get(index).getColumn());
-		
+		this.movesLeft();
+		if(!list.isEmpty()) {
+			Random rand = new Random();
+			//chooses a pseudo-random neutral disc from the list as its spot to play
+			int index = rand.nextInt(list.size());
+			//gets the values of the row and column from index
+			Arow = list.get(index).getRow();
+			Acolumn = list.get(index).getColumn();
+			//System.out.printf("%s player chose the row %d and column %d%n",this.getPlayerColor(),Arow,Acolumn);
+			board.checkMoves(this);
+		}
+		list.clear();
 	}
 	
 	/**
@@ -38,8 +46,6 @@ public class Computer extends Player {
 				}
 			}
 		}
-		board.toString();
-		System.out.println(list.toString());
 	}
 	/**
 	 * this function finds the empty spots around an already occupied disc
@@ -47,29 +53,31 @@ public class Computer extends Player {
 	 * @return
 	 */
 	private void manageNextTo(Disc[][] gameBoard,int row,int column) {
-		if(this.nextTo(row, column, this, 0, 1,gameBoard)) {/*checking to the right*/
-			list.add(gameBoard[row+0][column+1]);
+		int zero = 0;
+		int one = 1;
+		if(this.nextTo(row, column, this, zero, one,gameBoard)) {//checking to the right
+			if(board.validateMove(row, column, this, zero, -one))list.add(gameBoard[row+zero][column+one]);
 		}
-		if(this.nextTo(row, column, this, 0, -1,gameBoard)){/*checking to the left*/
-			list.add(gameBoard[row+0][column-1]);
+		if(this.nextTo(row, column, this, zero, -one,gameBoard)){//checking to the left
+			if(board.validateMove(row, column, this, zero, one))list.add(gameBoard[row+zero][column-one]);
 		}
-		if(this.nextTo(row, column, this, 1, 0,gameBoard)) {/*checking down*/
-			list.add(gameBoard[row+1][column+0]);
+		if(this.nextTo(row, column, this, one, zero,gameBoard)) {//checking down
+			if(board.validateMove(row, column, this, -one, zero))list.add(gameBoard[row+one][column+zero]);
 		}
-		if(this.nextTo(row, column, this, -1, 0,gameBoard)){/*checking up*/
-			list.add(gameBoard[row-1][column+0]);
+		if(this.nextTo(row, column, this, -one, zero,gameBoard)){//checking up
+			if(board.validateMove(row, column, this, one, zero))list.add(gameBoard[row-one][column+zero]);
 		}
-		if(this.nextTo(row, column, this, 1, 1,gameBoard)) {/*checking down right*/
-			list.add(gameBoard[row+1][column+1]);
+		if(this.nextTo(row, column, this, one, one,gameBoard)) {//checking down right
+			if(board.validateMove(row, column, this, -one, -one))list.add(gameBoard[row+one][column+one]);
 		}
-		if(this.nextTo(row, column, this, 1, -1,gameBoard)){/*checking down left*/
-			list.add(gameBoard[row+1][column-1]);
+		if(this.nextTo(row, column, this, one, -one,gameBoard)){//checking down left
+			if(board.validateMove(row, column, this, -one, one))list.add(gameBoard[row+one][column-one]);
 		}
-		if(this.nextTo(row, column, this, -1, 1,gameBoard)){/*checking up right*/
-			list.add(gameBoard[row-1][column+1]);
+		if(this.nextTo(row, column, this, -one, one,gameBoard)){//checking up right
+			if(board.validateMove(row, column, this, one, -one))list.add(gameBoard[row-one][column+one]);
 		}
-		if(this.nextTo(row, column, this, -1, -1,gameBoard)) {/*checking up left*/
-			list.add(gameBoard[row-1][column-1]);
+		if(this.nextTo(row, column, this, -one, -one,gameBoard)) {//checking up left
+			if(board.validateMove(row, column, this, one, one))list.add(gameBoard[row-one][column-one]);
 		}
 	}
 	/**
@@ -82,18 +90,17 @@ public class Computer extends Player {
 		row+=dRow;
 		column+= dColumn;
 		if(!board.isInBounds(row, column))return false;//checking board bounds
-		for(;board.isInBounds(row,column); row+=dRow,column+=dColumn) {
-			if(gameBoard[row][column].getState() == 0)return true;
-			if(gameBoard[row][column].getState() == p.getId())return false;//checks to see if it is empty
-		}
+		if(gameBoard[row][column].getState() == 0)return true;//checks to see if it is neutral
 		return false;
 	}
-	
 	public int getRowMove() {
 		return Arow;
 	}
 	public int getColumnMove() {
 		return Acolumn;
+	}
+	public void movesLeft() {
+		if(list.size() == 0)board.gameOver();;
 	}
 }
 	

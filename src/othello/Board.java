@@ -17,9 +17,12 @@ public class Board {
 	
 	
 	/**
-	 * populates the board with neutral discs
+	 * populates the board with neutral discs, resets the score, and makes the game playable
 	 */
 	public void populate() {
+		this.resetBlackScore();
+		this.resetWhiteScore();
+		this.gameOver = false;
 		for(int row = 0; row < BOARD_HEIGHT; row++) {
 			for(int column = 0; column < BOARD_WIDTH; column++) {
 				board[row][column] = new Disc(0,row,column);
@@ -57,16 +60,15 @@ public class Board {
 		this.updateBoard();
 		p.turn(System.in);
 		if(p.getPassCon() == true) {
-			System.out.println();//makes new line to 
+			System.out.println();
 			return;
 		}
 		if(p.getQuitCon() == true) {
 			this.quitGame(p);
 			this.gameOver = true;
-			//this.updateBoard();
 			return;
 		}
-		flippedDisc = 0;//resets the value of flippedDisc to see if any discs are claimed as player
+		flippedDisc = 0;//resets the value of flippedDisc to see if any discs are claimed
 		if(this.checkMoves(p) == true) {
 			return;
 		}
@@ -140,20 +142,61 @@ public class Board {
 		}
 		return pop;
 	}
+
+
+	
+	public boolean isInBounds(int num) {
+		if(num < 8 && num >=0) return true;
+		else return false;
+	}
+	/**
+	 * checks to see whether the player piece is in the board bounds
+	 * @param row
+	 * @param column
+	 * @return
+	 */
+	public boolean isInBounds(int row, int column) {
+		if((row < 8 && row >=0 ) && (column < 8 && column >= 0)) return true;
+		else return false;
+	}
+	
+	public boolean validateMove(int row, int column, Player p, int dRow, int dColumn) {
+		row+=dRow;
+		column+=dColumn;
+		if(!this.isInBounds(row, column))return false;//checking board bounds
+		for(;isInBounds(row,column); row+=dRow,column+=dColumn) {
+			if(board[row][column].getState() == p.getId())return true;
+			if(board[row][column].getState() == 0)return false;//checks to see if it is empty
+		}
+		return false;
+	}
+	private void flipDirection(int row, int column, Player p, int dRow, int dColumn) {
+		board[row][column].setState(p.getId());
+		for(;board[row+dRow][column+dColumn].getState() != p.getId(); row+=dRow,column+=dColumn) {
+			board[row+dRow][column+dColumn].setState(p.getId());
+			flippedDisc++;
+		}
+	}
+	
+	
 	
 	/**
 	 * reports the score of a player passed by reference
 	 * @param p
 	 * @return Score of player p
 	 */
-	public void Score() {
+	public String Score() {
+		int spread;
 		for(int row = 0; row < BOARD_HEIGHT; row++) {
 			for(int column = 0; column < BOARD_WIDTH; column++) {
 				if(board[row][column].getCurrentColor() == "B") blackScore++;
 				if(board[row][column].getCurrentColor() == "W") whiteScore++;
 			}
 		}
-		System.out.printf("player 1(black) scored %d and player 2(white) scored %d%nthat was a fun game",this.getBlackScore(),this.getWhiteScore());
+		spread = blackScore -whiteScore;
+		String message ="";
+		message = String.format("Scores:,    black:, %d, white:, %d,   Spread:, %d,",this.getBlackScore(),this.getWhiteScore(),spread);
+		return message;
 	}
 	/**
 	 * this method checks for any neutral discs left in the array
@@ -177,40 +220,6 @@ public class Board {
 		}
 		
 	}
-
-	
-	public boolean isInBounds(int num) {
-		if(num >= 8 || num <0) return false;
-		else return true;
-	}
-	/**
-	 * checks to see whether the player piece is in the board bounds
-	 * @param row
-	 * @param column
-	 * @return
-	 */
-	public boolean isInBounds(int row, int column) {
-		if((row < 8 || row >=0 ) && (column < 8 || column >= 0)) return true;
-		else return false;
-	}
-	
-	public boolean validateMove(int row, int column, Player p, int dRow, int dColumn) {
-		row+=dRow;
-		column+=dColumn;
-		if(!this.isInBounds(row, column))return false;//checking board bounds
-		for(;isInBounds(row,column); row+=dRow,column+=dColumn) {
-			if(board[row][column].getState() == p.getId())return true;
-			if(board[row][column].getState() == 0)return false;//checks to see if it is empty
-		}
-		return false;
-	}
-	private void flipDirection(int row, int column, Player p, int dRow, int dColumn) {
-		board[row][column].setState(p.getId());
-		for(;board[row+dRow][column+dColumn].getState() != p.getId(); row+=dRow,column+=dColumn) {
-			board[row+dRow][column+dColumn].setState(p.getId());
-			flippedDisc++;
-		}
-	}
 	/**
 	 * Method that refresh the board after moves
 	 */
@@ -233,6 +242,13 @@ public class Board {
 	public int getWhiteScore() {
 		return whiteScore;
 	}
+	public void resetBlackScore() {
+		blackScore = 0;
+	}
+
+	public void resetWhiteScore() {
+		whiteScore = 0;
+	}
 	
 	public int getBOARD_WIDTH() {
 		return BOARD_WIDTH;
@@ -243,6 +259,9 @@ public class Board {
 	}
 	public boolean getGameOver() {
 		return gameOver;
+	}
+	public void gameOver() {
+		gameOver = true;
 	}
 	public Disc[][] getBoard(){
 		return board;

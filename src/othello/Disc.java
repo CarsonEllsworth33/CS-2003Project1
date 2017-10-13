@@ -82,6 +82,13 @@ public class Disc {
 	 * this method makes the board appear empty
 	 * @return
 	 */
+	
+	public String toString() {
+		String color = this.getCurrentColor();
+		if(currentColor == "_")color = "N";
+		String message = (color + " disc at row: "+this.getRow()+" column: "+this.getColumn());
+		return message;
+	}
 	public int getColumn() {
 		return column;
 	}
