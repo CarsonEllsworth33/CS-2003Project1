@@ -79,22 +79,29 @@ public class Disc {
 		}
 	}//end of setState
 	/**
-	 * this method makes the board appear empty
-	 * @return
+	 * this method overwrites the toString function to better define the disc by color and location
+	 * @return String
 	 */
-	
 	public String toString() {
 		String color = this.getCurrentColor();
 		if(currentColor == "_")color = "N";
 		String message = (color + " disc at row: "+this.getRow()+" column: "+this.getColumn());
 		return message;
 	}
+	/**
+	 * gets the column choice of the computer
+	 * @return Integer
+	 */
 	public int getColumn() {
 		return column;
 	}
 	private void setColumn(int column) {
 		this.column = column;
 	}
+	/**
+	 * gets the row choice of the computer
+	 * @return Integer
+	 */
 	public int getRow() {
 		return row;
 	}

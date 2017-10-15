@@ -16,6 +16,10 @@ public class Computer extends Player {
 		super(id);
 		this.board = board;
 	}
+	/**
+	 * this is the main method for running the computer class which allows it to do all of its necessary functions to make a move
+	 * @param gameBoard
+	 */
 	public void turn(Disc[][] gameBoard) {
 		findBounds(gameBoard);
 		this.movesLeft();
@@ -50,7 +54,6 @@ public class Computer extends Player {
 	/**
 	 * this function finds the empty spots around an already occupied disc
 	 * @param gameBoard
-	 * @return
 	 */
 	private void manageNextTo(Disc[][] gameBoard,int row,int column) {
 		int zero = 0;
@@ -81,10 +84,14 @@ public class Computer extends Player {
 		}
 	}
 	/**
-	 * checks the surrounding discs of selected piece called after the piece has been determined
-	 * this function is a replacement for valid move
-	 * @param currRow
-	 * @param currColumn
+	 * checks all board spots containing a disc to look for empty spaces around it returns true is a direction contains an empty space
+	 * @param row
+	 * @param column
+	 * @param p
+	 * @param dRow
+	 * @param dColumn
+	 * @param gameBoard
+	 * @return boolean
 	 */
 	public boolean nextTo(int row, int column, Computer p, int dRow, int dColumn, Disc[][] gameBoard) {
 		row+=dRow;
@@ -93,12 +100,23 @@ public class Computer extends Player {
 		if(gameBoard[row][column].getState() == 0)return true;//checks to see if it is neutral
 		return false;
 	}
+	/**
+	 * returns the value of the row that the computer has chosen
+	 * @return Integer
+	 */
 	public int getRowMove() {
 		return Arow;
 	}
+	/**
+	 * returns the value of the column that the computer has chosen
+	 * @return Integer
+	 */
 	public int getColumnMove() {
 		return Acolumn;
 	}
+	/**
+	 * checks to see if there is any available moves left and if there is not then the game ends
+	 */
 	public void movesLeft() {
 		if(list.size() == 0)board.gameOver();;
 	}

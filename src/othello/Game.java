@@ -28,7 +28,9 @@ public class Game {
 		input = scanner.nextLine();
 		return input;
 	}
-	
+	/**
+	 * this method creates the necessities to run the original Othello game
+	 */
 	private void twoPlayerGame() {
 		Player player1 = new Player(2);
 	    Player player2 = new Player(1);
@@ -42,10 +44,12 @@ public class Game {
 			board.takeTurn(player2);
 			board.winCondition();
 			}
-		this.endGame();
+		System.out.println(this.endGame());
 	}
 	
-	
+	/**
+	 * creates a computer for a person to play against
+	 */
 	private void onePlayerGame() {
 		Player player1 = new Player(2);
 	    Computer player2 = new Computer(1,board);
@@ -62,9 +66,11 @@ public class Game {
     		player2.turn(board.getBoard());
     		System.out.printf("white player chose row: %d column: %d%n",player2.getRowMove(),player2.getColumnMove());
     	}
-		System.out.println("test one player works");
+		System.out.println(this.endGame());
 	}
-	
+	/**
+	 * creates a simulator that runs through a number of specified simulations and stores the data from each game into a .txt file in the project directory
+	 */
 	private void monteCarloSim() {
 		File file = new File("Scores.txt");
 		try {
@@ -72,7 +78,6 @@ public class Game {
 				try {
 					file.createNewFile();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -105,7 +110,9 @@ public class Game {
 	    	
 	}
 	
-	
+	/**
+	 * initially ran to allow the user to make a selection for which game they would like to play
+	 */
 	public void gameModeSelection() {
 		System.out.println("Welcome to the game selection menu for othello here are your options (when deciding do not type in the quotes \"\")");
 		System.out.println(":type in \"Sim\" to run the Monte Carlo simulator");
@@ -128,13 +135,20 @@ public class Game {
 		}//end of switch statement
 	}
 	
-	
+	/**
+	 * returns the board score at the end of the game 
+	 * @return String
+	 */
 	public String endGame() {
 			return board.Score();
 			}
 	
 	
-	
+	/**
+	 * Modular Integer input that returns the value of any positive number
+	 * @param in
+	 * @return Integer
+	 */
 	public int getIntInput(InputStream in) {
 		Scanner scanner = new Scanner(in);
 		if(scanner.hasNextInt()) {

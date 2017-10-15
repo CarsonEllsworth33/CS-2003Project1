@@ -54,7 +54,7 @@ public class Board {
 	
 	/**
 	 * makes the board aware that a player passed by reference is going to claim a neutral disc
-	 * @param p
+	 * @param p is of the player class 
 	 */
 	public void takeTurn(Player p) {
 		this.updateBoard();
@@ -77,7 +77,10 @@ public class Board {
 		}
 		
 	}
-	
+	/**checks all 8 possible spots around the players move choice and validates it
+	 * @param p is of the player class
+	 * @return boolean
+	 */
 	public boolean checkMoves(Player p) {
 		if(board[p.getRowMove()][p.getColumnMove()].getState() != 0)return false;
 		if(board[p.getRowMove()][p.getColumnMove()].getState() == p.getId())return false;
@@ -123,7 +126,12 @@ public class Board {
 		}
 	}
 	
-	
+	/**
+	 * used to check if a disc has been successfully flipped over
+	 * @param pop
+	 * @param p
+	 * @return Integer
+	 */
 	public int flipCheck(int pop,Player p) {
 		int playerOneDiscs = 0;
 		int playerTwoDiscs = 0;
@@ -144,7 +152,11 @@ public class Board {
 	}
 
 
-	
+	/**
+	 * checks to see whether a certain number is within the bounds of the board
+	 * @param num
+	 * @return boolean
+	 */
 	public boolean isInBounds(int num) {
 		if(num < 8 && num >=0) return true;
 		else return false;
@@ -153,13 +165,21 @@ public class Board {
 	 * checks to see whether the player piece is in the board bounds
 	 * @param row
 	 * @param column
-	 * @return
+	 * @return boolean
 	 */
 	public boolean isInBounds(int row, int column) {
 		if((row < 8 && row >=0 ) && (column < 8 && column >= 0)) return true;
 		else return false;
 	}
-	
+	/**
+	 * this move checks whether a move is valid by checking the entire row,column, or diagonal
+	 * @param row
+	 * @param column
+	 * @param p
+	 * @param dRow
+	 * @param dColumn
+	 * @return boolean
+	 */
 	public boolean validateMove(int row, int column, Player p, int dRow, int dColumn) {
 		row+=dRow;
 		column+=dColumn;
@@ -181,12 +201,12 @@ public class Board {
 	
 	
 	/**
-	 * reports the score of a player passed by reference
-	 * @param p
-	 * @return Score of player p
+	 * calculates the score of both players and formats the data into a readable csv style format
+	 * @return String
 	 */
 	public String Score() {
 		int spread;
+		int whoWon = 0;
 		for(int row = 0; row < BOARD_HEIGHT; row++) {
 			for(int column = 0; column < BOARD_WIDTH; column++) {
 				if(board[row][column].getCurrentColor() == "B") blackScore++;
@@ -194,8 +214,14 @@ public class Board {
 			}
 		}
 		spread = blackScore -whiteScore;
+		if(spread > 0) {
+			whoWon = 1;
+		}
+		else if(spread < 0) {
+			whoWon = -1;
+		}
 		String message ="";
-		message = String.format("Scores:,    black:, %d, white:, %d,   Spread:, %d,",this.getBlackScore(),this.getWhiteScore(),spread);
+		message = String.format("Scores:,    black:, %d, white:, %d,   Spread:, %d, Win Score:, %d",this.getBlackScore(),this.getWhiteScore(),spread,whoWon);
 		return message;
 	}
 	/**
@@ -234,35 +260,63 @@ public class Board {
 		board[4][3].setState(2);
 		
 	}
-	
+	/**
+	 * returns the value of blackScore
+	 * @return Integer
+	 */
 	public int getBlackScore() {
 		return blackScore;
 	}
-
+	/**
+	 * returns the value of whiteScore
+	 * @return Integer
+	 */
 	public int getWhiteScore() {
 		return whiteScore;
 	}
+	/**
+	 * resets the value of blackScore
+	 */
 	public void resetBlackScore() {
 		blackScore = 0;
 	}
-
+	/**
+	 * resets the value of whiteScore
+	 */
 	public void resetWhiteScore() {
 		whiteScore = 0;
 	}
-	
+	/**
+	 * returns the value of the board width
+	 * @return Integer
+	 */
 	public int getBOARD_WIDTH() {
 		return BOARD_WIDTH;
 	}
-
+	/**
+	 * returns the value of the board height
+	 * @return Integer
+	 */
 	public int getBOARD_HEIGHT() {
 		return BOARD_HEIGHT;
 	}
+	/**
+	 * returns the value of the gameOver variable
+	 * @return boolean
+	 */
 	public boolean getGameOver() {
 		return gameOver;
 	}
+	/**
+	 * sets the value of game over to true when the game is over
+	 */
 	public void gameOver() {
 		gameOver = true;
 	}
+	/**
+	 * this returns the state of the game board
+	 * @return Disc[][]
+	 */
 	public Disc[][] getBoard(){
 		return board;
 	}

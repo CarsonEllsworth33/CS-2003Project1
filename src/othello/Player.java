@@ -13,7 +13,10 @@ public class Player {
 		this.setId(id);
 	}
 	
-	
+	/**
+	 * returns the players disc color
+	 * @return String
+	 */
 	public String getPlayerColor() {
 		if(this.id == 1) {
 			return "white";
@@ -24,33 +27,50 @@ public class Player {
 	
 	/**
 	 * returns player input -1 to make sure index is in range
-	 * @return
+	 * @return Integer
 	 */
 	public int getRowMove() {
 		return Arow - 1;
 	}
 	/**
 	 * returns player input -1 to make sure index is in range
-	 * @return
+	 * @return Integer
 	 */
 	public int getColumnMove() {
 		return Acolumn -1;
 	}
+	/**
+	 * returns the value for the quit condition
+	 * @return boolean
+	 */
 	public boolean getQuitCon() {
 		return quitCon;
 	}
+	/**
+	 * returns the value for the pass condition
+	 * @return boolean
+	 */
 	public boolean getPassCon() {
 		return passCon;
 	}
 	
-	
+	/**
+	 * returns the player Id
+	 * @return Integer
+	 */
 	public int getId() {
 		return id;
 	}
+	/**
+	 * sets the player id the player Id
+	 */
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+	/**
+	 * returns the id of the other player
+	 * @return Integer
+	 */
 	public int otherPlayer() {
 		if(this.getId() == 1) return 2;
 		if(this.getId() == 2) return 1;
@@ -62,7 +82,6 @@ public class Player {
 	/**
 	 * this function will allow the player to place a disc down in a possible coordinate spot
 	 * @param in
-	 * @return
 	 */
 	public void turn(InputStream in){
 		quitCon = false;//resets for every turn so to not continuously quit
