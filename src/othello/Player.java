@@ -64,7 +64,7 @@ public class Player {
 	/**
 	 * sets the player id the player Id
 	 */
-	public void setId(int id) {
+	private void setId(int id) {
 		this.id = id;
 	}
 	/**
